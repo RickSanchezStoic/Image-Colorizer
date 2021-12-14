@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<title>Image Colorizer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+  background-image: url('https://www.w3schools.com/w3images/forestbridge.jpg');
+  min-height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+</style>
+<body>
+
+<div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+
+ <div class="w3-display-middle w3-center w3-margin-bottom">
+<div class="w3-container w3-center w3-margin-bottom w3-margin-bottom">
+<h2>Upload a grayscale image</h2>
+
+ <input id="upload"  type="file" name="myInput" accept="image/*, .pdf" required onchange="loadFile(event)">
+ <p><button type="button" id="myButton">Colorify</button></p>
+
+</div>
+</div>
+  <div class="w3-display-left w3-padding-large">
+   <img id="output"/ > 
+  </div>
+<div class="w3-display-right w3-padding-large">
+   <img id="colored"/ > 
+  </div>
+</div>
+<script>
+  var loadFile = function(event) {
+    var reader = new FileReader();
+    reader.onload = function(){
+      var output = document.getElementById('output');
+      output.src = reader.result;
+output.height="400"
+output.width="400"
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  };
+
+zz=document.getElementById("myButton");
+zz.addEventListener('click',handleimage);
+function handleimage(e){
+const im=document.getElementById("upload").files;
+const formdata= new FormData()
+formdata.append('image', im[0])
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+       // Typical action to be performed when the document is ready:
+
+document.getElementById('colored').src='data:image/png;base64,'+xhttp.responseText;
+
+
+       console.log(xhttp.responseText);
+    }
+};
+xhttp.open("POST", "/predict", true);
+xhttp.send(formdata);
+
+}
+</script>
+</body>
+</html>
